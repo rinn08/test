@@ -1,0 +1,138 @@
+#include <stdio.h>
+#include <conio.h>
+//============================================================
+//cay nhi phan tim kiem  
+typedef struct tNode
+{
+	int data;
+	tNode *pLeft;
+	tNode *pRight;
+}NODE;
+typedef NODE* TREE;
+//============================================================
+void InitTree(TREE &t)
+{
+	t=NULL;
+}
+//============================================================
+NODE* CreateNode(int x)
+{
+	NODE *p=new NODE();
+	p->data=x;
+	p->pLeft=NULL;
+	p->pRight=NULL;
+	return p;
+}
+//============================================================
+void InsertNode(TREE &root,int x )
+{
+	if(root==NULL)
+	{
+		root=CreateNode(x);
+	}	
+	else
+	{
+		if(x<root->data )
+			InsertNode(root->pLeft,x);
+		else if(x>root->data)
+			InsertNode(root->pRight,x);
+		else
+			printf("trung gia tri, khong them\n");
+	}
+}
+//============================================================
+void createTree(TREE &root)
+{
+	InitTree(root);
+	int x;
+	do
+	{
+		printf("\nNhap phan tu x: ");
+		scanf("%d",&x);
+		if(x==0)
+			break;
+		InsertNode(root,x);
+	}while(x!=0);
+}
+//============================================================
+void LNR(TREE root)
+{
+	if(root!=NULL)
+	{
+		LNR(root->pLeft);
+		printf("%5d",root->data);
+		LNR(root->pRight);
+	}
+}
+//============================================================
+createTree2(int a[], int n, TREE &t)
+{
+	int i = 0;
+	InitTree(t);
+	while(i<n)
+	{
+		InsertNode(t,a[i]);
+		i++;
+	}
+}
+//============================================================
+int DemNodeLa(TREE root)
+{   if(root==NULL) 
+		return 0;
+    else
+        if(root->pLeft==NULL && root->pRight==NULL) 
+	   		return 1;
+        else 
+			return DemNodeLa(root->pLeft)+DemNodeLa(root->pRight);
+}
+//============================================================
+int DoSau(TREE root) 
+{
+   if (root==NULL) 
+       return 0;
+   else
+   {
+    
+       int lDepth = DoSau(root->pLeft);
+       int rDepth = DoSau(root->pRight);
+
+     
+       if (lDepth > rDepth) 
+           return(lDepth+1);
+       else return(rDepth+1);
+   }
+}
+//============================================================
+int TimMax(TREE root)
+{
+    if (root->pRight == NULL)
+    {
+        return root->data;
+    }
+    return TimMax(root->pRight); 
+}
+//============================================================
+int Sum(TREE root)
+    {
+    	if (root == NULL)
+    		return 0;
+    	int a = Sum(root->pLeft);
+    	int b = Sum(root->pRight);
+    	return a + b + root->data;
+    }
+//============================================================
+int main()
+{
+	TREE t;
+	int a[]={7,3,9,2,5,8,6};
+	int n = 7;
+	createTree2(a,n,t);
+//	createTree(t);
+	printf("\ndanh sach cay tang dan ");
+	LNR(t);
+	
+	printf("\nSo luong node la: %d",DemNodeLa(t));
+	printf("\nDo sau  cua cay la: %d",DoSau(t));
+	printf("\nGia tri lon nhat trong cay: %d",TimMax(t));
+	printf("\nTong cac gia tri  trong cay: %d",Sum(t));
+}
